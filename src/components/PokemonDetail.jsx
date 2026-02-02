@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Axios from "../services/Axios";
+import "../PokemonDetail.css";
 
 export default function PokemonDetail() {
     const { id } = useParams();
@@ -16,72 +17,137 @@ export default function PokemonDetail() {
             .catch(() => setError(true));
     }, [id]);
 
-    if (error) return <div className="error-msg">Pokémon introuvable. <button onClick={() => navigate('/list')}>Retour</button></div>;
-    if (!pokemon) return <div className="loader">Chargement...</div>;
+    if (error) return (
+        <div className="error-msg">
+            <h2>Pokémon not found</h2>
+            <button onClick={() => navigate('/list')}>← Back to List</button>
+        </div>
+    );
+    
+    if (!pokemon) return <div className="loader">Loading...</div>;
 
     const getStatPct = (v) => Math.min((v / 255) * 100, 100);
-    const getTypeCol = (t) => {
-        const colors = { Normal: "#A8A878", Feu: "#F08030", Eau: "#6890F0", Électrik: "#F8D030", Plante: "#78C850", Glace: "#98D8D8", Combat: "#C03028", Poison: "#A040A0", Sol: "#E0C068", Vol: "#A890F0", Psy: "#F85888", Bug: "#A8B820", Roche: "#B8A038", Fantôme: "#705898", Dragon: "#7038F8", Sombre: "#705848", Metal: "#B8B8D0", Fée: "#EE99AC" };
-        return colors[t] || "#777";
+    
+    const typeColors = {
+        Normal: "#A8A878", Feu: "#F08030", Eau: "#6890F0", 
+        Électrik: "#F8D030", Plante: "#78C850", Glace: "#98D8D8",
+        Combat: "#C03028", Poison: "#A040A0", Sol: "#E0C068",
+        Vol: "#A890F0", Psy: "#F85888", Insecte: "#A8B820",
+        Roche: "#B8A038", Spectre: "#705898", Dragon: "#7038F8",
+        Ténèbres: "#705848", Acier: "#B8B8D0", Fée: "#EE99AC"
+    };
+
+    const primaryType = pokemon.types?.[0]?.name;
+    const primaryColor = typeColors[primaryType] || "#3b4cca";
+
+    const statLabels = {
+        hp: "HP",
+        atk: "Attack",
+        def: "Defense",
+        spe_atk: "Sp. Atk",
+        spe_def: "Sp. Def",
+        vit: "Speed"
     };
 
     return (
-        <div className="pokemon-detail-page">
-            <button className="back-button" onClick={() => navigate(-1)}>← Retour</button>
-            <div className="detail-container">
-                <div className="header-section">
-                    <span className="pokemon-id">#{pokemon.pokedex_id}</span>
-                    <h1 className="pokemon-name">{pokemon.name?.fr}</h1>
-                    <div className="type-badges">
-                        {pokemon.types?.map((t, i) => (
-                            <div key={i} className="type-badge-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '5px' }}>
-                                <img src={t.image} alt={t.name} style={{ width: '30px' }} />
-                                <span>{t.name}</span>
-                                <br />
-                            </div>
-                        ))}
-                    </div>
-                </div>
+        <div className="pokemon-detail-page" style={{ '--primary-color': primaryColor }}>
+            <button className="back-button" onClick={() => navigate(-1)}>
+                ← Back
+            </button>
 
-                <div className="content-grid">
-                    <div className="image-section">
-                        <img src={pokemon.sprites?.regular} alt={pokemon.name?.fr} className="main-sprite" />
-                    </div>
-
-                    <div className="info-section">
-                        <div className="info-card">
-                            <h2>Statistiques</h2>
-                            {pokemon.stats && Object.entries(pokemon.stats).map(([k, v]) => (
-                                <div key={k + v} className="stat-row">
-                                    <span className="stat-name">{k.toUpperCase()}</span>
-                                    <span className="stat-value">{v}</span>
-                                    <div className="stat-bar"><div className="stat-fill" style={{ width: `${getStatPct(v)}%` }}></div></div>
+            <div className="detail-hero">
+                <div className="hero-background"></div>
+                <div className="hero-content">
+                    <div className="pokemon-header">
+                        <span className="pokemon-number">#{String(pokemon.pokedex_id).padStart(3, '0')}</span>
+                        <h1 className="pokemon-title">{pokemon.name?.fr}</h1>
+                        <div className="type-badges">
+                            {pokemon.types?.map((t, i) => (
+                                <div key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
+                                    <img src={t.image} alt={t.name} />
+                                    <span>{t.name}</span>
                                 </div>
                             ))}
                         </div>
+                    </div>
 
-                        <div className="info-card">
-                            <h2>Évolutions</h2>
-                            <div className="evolution-list">
-                                {pokemon.evolution?.pre?.map((e, i) => (
-                                    <><Link key={i} to={`/pokemon/${e.pokedex_id}`} className="evo-item">
-                                        Prév: {e.name}
-                                    </Link>
-                                        <br />
-                                    </>
-                                ))}
-                                {pokemon.evolution?.next?.map((e, i) => (
-                                    <><Link key={i} to={`/pokemon/${e.pokedex_id}`} className="evo-item">
-                                        Suiv: {e.name} ({e.condition})
-                                    </Link>
-                                        <br />
-                                    </>
-                                ))}
-                                {!pokemon.evolution?.pre && !pokemon.evolution?.next && <p>Pas d'évolution</p>}
-                            </div>
-                        </div>
+                    <div className="pokemon-image-container">
+                        <div className="image-glow"></div>
+                        <img 
+                            src={pokemon.sprites?.regular} 
+                            alt={pokemon.name?.fr} 
+                            className="pokemon-image-main"
+                        />
                     </div>
                 </div>
+            </div>
+
+            <div className="detail-content">
+                <div className="stats-card">
+                    <h2 className="section-title">Base Stats</h2>
+                    <div className="stats-grid">
+                        {pokemon.stats && Object.entries(pokemon.stats).map(([key, value], index) => (
+                            <div key={key} className="stat-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                                <div className="stat-header">
+                                    <span className="stat-label">{statLabels[key] || key}</span>
+                                    <span className="stat-value">{value}</span>
+                                </div>
+                                <div className="stat-bar-container">
+                                    <div 
+                                        className="stat-bar-fill" 
+                                        style={{ 
+                                            width: `${getStatPct(value)}%`,
+                                            animationDelay: `${index * 0.1 + 0.2}s`
+                                        }}
+                                    ></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="total-stats">
+                        <span>Total</span>
+                        <span className="total-value">
+                            {pokemon.stats && Object.values(pokemon.stats).reduce((a, b) => a + b, 0)}
+                        </span>
+                    </div>
+                </div>
+
+                {(pokemon.evolution?.pre?.length > 0 || pokemon.evolution?.next?.length > 0) && (
+                    <div className="evolution-card">
+                        <h2 className="section-title">Evolution Chain</h2>
+                        <div className="evolution-chain">
+                            {pokemon.evolution?.pre?.map((e, i) => (
+                                <Link 
+                                    key={i} 
+                                    to={`/pokemon/${e.pokedex_id}`} 
+                                    className="evolution-item previous"
+                                >
+                                    <div className="evo-label">Previous</div>
+                                    <div className="evo-name">{e.name}</div>
+                                    <div className="evo-arrow">→</div>
+                                </Link>
+                            ))}
+                            
+                            <div className="evolution-item current">
+                                <div className="evo-label">Current</div>
+                                <div className="evo-name">{pokemon.name?.fr}</div>
+                            </div>
+
+                            {pokemon.evolution?.next?.map((e, i) => (
+                                <Link 
+                                    key={i} 
+                                    to={`/pokemon/${e.pokedex_id}`} 
+                                    className="evolution-item next"
+                                >
+                                    <div className="evo-arrow">→</div>
+                                    <div className="evo-label">Next</div>
+                                    <div className="evo-name">{e.name}</div>
+                                    {e.condition && <div className="evo-condition">{e.condition}</div>}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
