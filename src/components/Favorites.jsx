@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Axios from "../services/Axios";
 import { storage } from "../services/Storage";
+import "../Favorites.css";
 
 export default function Favorites() {
     const [pokemons, setPokemons] = useState([]);
@@ -27,30 +28,85 @@ export default function Favorites() {
         pokemons.filter(p => favorites.includes(p.pokedex_id)), 
     [pokemons, favorites]);
 
-    if (loading) return <div className="loader">Chargement de vos favoris...</div>;
+    if (loading) return <div className="loader">Loading your team...</div>;
 
     return (
-        <div className="list-page" style={{ width: "100%", textAlign: "center", padding: "20px" }}>
-            <h2>My Team (⭐ {favPokemons.length})</h2>
+        <div className="favorites-page">
+            <div className="favorites-header">
+                <div className="header-content">
+                    <h1 className="page-title">
+                        <span className="title-icon">⭐</span>
+                        My Dream Team
+                    </h1>
+                    <div className="team-count">
+                        <span className="count-number">{favPokemons.length}</span>
+                        <span className="count-label">Pokémon</span>
+                    </div>
+                </div>
+                <div className="header-decoration"></div>
+            </div>
+
             {favPokemons.length === 0 ? (
-                <p>No favorites yet. Go to the <Link to="/list">list</Link> to add some!</p>
+                <div className="empty-state">
+                    <div className="empty-icon">✨</div>
+                    <h2>Your team is waiting!</h2>
+                    <p>Add your favorite Pokémon to build your dream team.</p>
+                    <Link to="/list" className="cta-button">
+                        Explore Pokédex
+                    </Link>
+                </div>
             ) : (
-                <ul className="pokemon-grid">
-                    {favPokemons.map((p) => (
-                        <li key={p.pokedex_id} style={{ position: "relative" }}>
+                <div className="team-grid">
+                    {favPokemons.map((p, index) => (
+                        <div 
+                            key={p.pokedex_id} 
+                            className="team-card"
+                            style={{ animationDelay: `${index * 0.1}s` }}
+                        >
                             <button 
-                                className="fav-btn" 
+                                className="remove-btn" 
                                 onClick={(e) => toggleFavorite(e, p.pokedex_id)}
-                                style={{ position: "absolute", top: "10px", left: "10px", color: "#ffcb05", backgroundColor: "transparent" }}
-                            >★</button>
-                            <Link to={`/pokemon/${p.pokedex_id}`} className="pokemon-card-link">
-                                <span className="pokemon-id">#{p.pokedex_id}</span>
-                                <img src={p.sprites?.regular} alt={p.name?.fr} loading="lazy" />
-                                <span className="pokemon-name">{p.name?.fr}</span>
+                                title="Remove from team"
+                            >
+                                <span className="remove-icon">×</span>
+                            </button>
+
+                            <Link to={`/pokemon/${p.pokedex_id}`} className="card-link">
+                                <div className="card-badge">
+                                    #{String(p.pokedex_id).padStart(3, '0')}
+                                </div>
+
+                                <div className="card-image-container">
+                                    <div className="image-bg"></div>
+                                    <img 
+                                        src={p.sprites?.regular} 
+                                        alt={p.name?.fr} 
+                                        className="card-image"
+                                        loading="lazy" 
+                                    />
+                                </div>
+
+                                <div className="card-info">
+                                    <h3 className="card-name">{p.name?.fr}</h3>
+                                    
+                                    {p.types && p.types.length > 0 && (
+                                        <div className="card-types">
+                                            {p.types.map((t, i) => (
+                                                <img 
+                                                    key={i}
+                                                    src={t.image} 
+                                                    alt={t.name}
+                                                    className="type-icon"
+                                                    title={t.name}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </Link>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );
