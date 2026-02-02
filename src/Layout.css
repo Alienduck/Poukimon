@@ -1,0 +1,238 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-header {
+  background-color: #ff3e3e;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: sticky; /* Le header reste en haut */
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.main-header nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.main-header nav a:hover {
+  opacity: 0.8;
+}
+
+.main-header nav a.active {
+  border-bottom: 2px solid white;
+  padding-bottom: 5px;
+}
+
+.app-content {
+  flex: 1;
+  padding: 2rem 1rem; /* Moins de padding sur les côtés pour mobile */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centre le contenu des pages Guess et Random */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.main-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+/* Style global pour les listes (Pokelist) en mode Grille */
+.pokemon-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* Dans Layout.css */
+.type-select {
+  position: relative;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.type-select-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  height: 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.type-select-display img {
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  align-items: center;
+}
+
+.type-select-options {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+}
+
+.type-select-options .option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.type-select-options .option:hover {
+  background: #eee;
+}
+
+.type-select-options img {
+  width: 24px;
+  height: 24px;
+}
+
+li {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+li img {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  margin: 10px 0;
+}
+
+.pokemon-id {
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: #888;
+  background-color: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.pokemon-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+  margin-top: auto;
+}
+
+.hidden {
+  filter: brightness(0);
+}
+
+.revealed {
+  filter: brightness(1);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .main-header nav {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .main-header nav a {
+    margin-left: 0;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Boutons globaux */
+button {
+  background-color: #3b4cca;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #2a3990;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  font-size: 1rem;
+}
