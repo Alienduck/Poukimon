@@ -1,4 +1,4 @@
-/* Favorites Page Styles */
+/* Favorites Page Styles with Dark Mode */
 
 .favorites-page {
   width: 100%;
@@ -28,6 +28,11 @@
   margin-bottom: 3rem;
   overflow: hidden;
   box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+}
+
+[data-theme="dark"] .favorites-header {
+  background: linear-gradient(135deg, #5c6bc0 0%, #512da8 100%);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
 }
 
 .header-decoration {
@@ -73,6 +78,11 @@
   animation: sparkle 2s ease-in-out infinite;
 }
 
+.title-icon:hover {
+  animation: ultra-spin 0.2s linear infinite;
+  cursor: pointer;
+}
+
 @keyframes sparkle {
   0%,
   100% {
@@ -80,6 +90,15 @@
   }
   50% {
     transform: scale(1.2) rotate(15deg);
+  }
+}
+
+@keyframes ultra-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -114,10 +133,11 @@
 .empty-state {
   text-align: center;
   padding: 5rem 2rem;
-  background: white;
+  background: var(--surface);
   border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
   animation: scaleIn 0.5s ease-out;
+  border: 1px solid var(--border-color);
 }
 
 @keyframes scaleIn {
@@ -150,13 +170,13 @@
 .empty-state h2 {
   font-size: 2rem;
   font-weight: 800;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
 }
 
 .empty-state p {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -173,9 +193,18 @@
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
+[data-theme="dark"] .cta-button {
+  background: linear-gradient(135deg, #5c6bc0 0%, #512da8 100%);
+  box-shadow: 0 8px 20px rgba(92, 107, 192, 0.4);
+}
+
 .cta-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+[data-theme="dark"] .cta-button:hover {
+  box-shadow: 0 12px 30px rgba(92, 107, 192, 0.5);
 }
 
 /* Team Grid */
@@ -200,13 +229,14 @@
 /* Team Card */
 .team-card {
   position: relative;
-  background: white;
+  background: var(--surface);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: cardAppear 0.5s ease-out;
   animation-fill-mode: both;
+  border: 1px solid var(--border-color);
 }
 
 @keyframes cardAppear {
@@ -222,7 +252,7 @@
 
 .team-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .remove-btn {
@@ -243,10 +273,20 @@
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
 
+[data-theme="dark"] .remove-btn {
+  background: rgba(244, 67, 54, 0.9);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
 .remove-btn:hover {
   background: rgba(192, 57, 43, 1);
-  transform: scale(1.1) rotate(90deg);
+  transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+[data-theme="dark"] .remove-btn:hover {
+  background: rgba(211, 47, 47, 1);
+  box-shadow: 0 6px 16px rgba(244, 67, 54, 0.5);
 }
 
 .remove-icon {
@@ -254,6 +294,7 @@
   font-size: 1.8rem;
   font-weight: 300;
   line-height: 1;
+  margin-bottom: 5px;
 }
 
 .card-link {
@@ -275,6 +316,10 @@
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .card-badge {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 /* Card Image */
@@ -300,6 +345,14 @@
   animation: pulse 3s ease-in-out infinite;
 }
 
+[data-theme="dark"] .image-bg {
+  background: radial-gradient(
+    circle,
+    rgba(92, 107, 192, 0.2) 0%,
+    transparent 70%
+  );
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -322,6 +375,10 @@
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
 }
 
+[data-theme="dark"] .card-image {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+}
+
 .team-card:hover .card-image {
   transform: scale(1.1);
 }
@@ -334,7 +391,7 @@
 .card-name {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -354,6 +411,10 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
+[data-theme="dark"] .type-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
 .type-icon:hover {
   transform: scale(1.2);
 }
@@ -366,7 +427,7 @@
   min-height: 400px;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #667eea;
+  color: var(--secondary-color);
 }
 
 /* Responsive Design */

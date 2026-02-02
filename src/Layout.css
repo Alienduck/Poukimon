@@ -1,20 +1,47 @@
 /* ========================================
-   POUKIMON - MODERN DESIGN SYSTEM
+   POUKIMON - MODERN DESIGN SYSTEM WITH DARK MODE
    ======================================== */
 
-/* CSS Variables for consistent theming */
-:root {
+/* Light Theme Variables */
+:root[data-theme="light"] {
   --primary-color: #ff3e3e;
   --primary-dark: #d63030;
   --secondary-color: #3b4cca;
   --background: #f5f7fa;
   --surface: #ffffff;
+  --surface-elevated: #ffffff;
   --text-primary: #1a1a1a;
   --text-secondary: #666666;
   --border-color: #e0e0e0;
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 15px 50px rgba(0, 0, 0, 0.15);
+  --overlay: rgba(0, 0, 0, 0.05);
+  --header-bg: linear-gradient(135deg, #ff3e3e 0%, #d63030 100%);
+  --footer-bg: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+}
+
+/* Dark Theme Variables */
+:root[data-theme="dark"] {
+  --primary-color: #ff5252;
+  --primary-dark: #ff1744;
+  --secondary-color: #5c6bc0;
+  --background: #121212;
+  --surface: #1e1e1e;
+  --surface-elevated: #2a2a2a;
+  --text-primary: #e8e8e8;
+  --text-secondary: #b0b0b0;
+  --border-color: #3a3a3a;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 15px 50px rgba(0, 0, 0, 0.5);
+  --overlay: rgba(255, 255, 255, 0.05);
+  --header-bg: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+  --footer-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+}
+
+/* Common Variables */
+:root {
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -37,6 +64,9 @@ body {
   background-color: var(--background);
   color: var(--text-primary);
   line-height: 1.6;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* ========================================
@@ -54,7 +84,7 @@ body {
    ======================================== */
 
 .main-header {
-  background: linear-gradient(135deg, #ff3e3e 0%, #d63030 100%);
+  background: var(--header-bg);
   color: white;
   padding: 1.2rem 2rem;
   display: flex;
@@ -65,6 +95,11 @@ body {
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
+  gap: 2rem;
+}
+
+[data-theme="dark"] .main-header {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .logo {
@@ -84,6 +119,8 @@ body {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex: 1;
+  justify-content: center;
 }
 
 .main-header nav a {
@@ -143,7 +180,7 @@ body {
    ======================================== */
 
 .main-footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+  background: var(--footer-bg);
   color: white;
   text-align: center;
   padding: 1.5rem;
@@ -197,6 +234,7 @@ body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  border: 1px solid var(--border-color);
 }
 
 .pokemon-grid li::before {
@@ -233,6 +271,10 @@ body {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
+[data-theme="dark"] .pokemon-grid li img {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
 .pokemon-grid li:hover img {
   transform: scale(1.1);
 }
@@ -242,7 +284,7 @@ body {
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-secondary);
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--overlay);
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
   letter-spacing: 0.05em;
@@ -285,6 +327,7 @@ body {
   transition: var(--transition);
   font-weight: 600;
   box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
 }
 
 .type-select-display:hover {
@@ -331,10 +374,11 @@ body {
   cursor: pointer;
   transition: background 0.2s ease;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .type-select-options .option:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--overlay);
 }
 
 .type-select-options img {
@@ -361,10 +405,18 @@ button {
   letter-spacing: 0.05em;
 }
 
+[data-theme="dark"] button {
+  box-shadow: 0 4px 12px rgba(92, 107, 192, 0.4);
+}
+
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(59, 76, 202, 0.4);
   background: linear-gradient(135deg, #2a3990 0%, #5569d8 100%);
+}
+
+[data-theme="dark"] button:hover {
+  box-shadow: 0 6px 20px rgba(92, 107, 192, 0.5);
 }
 
 button:active {
@@ -389,7 +441,7 @@ input[type="text"] {
 input[type="text"]:focus {
   outline: none;
   border-color: var(--secondary-color);
-  box-shadow: 0 0 0 3px rgba(59, 76, 202, 0.1);
+  box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.1);
 }
 
 input[type="text"]::placeholder {
@@ -413,6 +465,7 @@ input[type="text"]::placeholder {
   max-width: 600px;
   width: 100%;
   animation: scaleIn 0.5s ease-out;
+  border: 1px solid var(--border-color);
 }
 
 @keyframes scaleIn {
@@ -444,6 +497,12 @@ input[type="text"]::placeholder {
   width: 100%;
 }
 
+.pokemon-card-display img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+}
+
 .input-group {
   display: flex;
   gap: 1rem;
@@ -459,8 +518,12 @@ input[type="text"]::placeholder {
   font-weight: 600;
   padding: 1rem 2rem;
   border-radius: var(--radius-md);
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(92, 107, 192, 0.1);
   color: var(--secondary-color);
+}
+
+[data-theme="dark"] .status-message {
+  background: rgba(92, 107, 192, 0.2);
 }
 
 .refresh-btn {

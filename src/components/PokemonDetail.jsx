@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, NavLink } from "react-router-dom";
 import Axios from "../services/Axios";
 import "../PokemonDetail.css";
 
@@ -63,10 +63,10 @@ export default function PokemonDetail() {
                         <h1 className="pokemon-title">{pokemon.name?.fr}</h1>
                         <div className="type-badges">
                             {pokemon.types?.map((t, i) => (
-                                <div key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
+                                <NavLink hrefLang={`/list?type=${t.name}`} key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
                                     <img src={t.image} alt={t.name} />
                                     <span>{t.name}</span>
-                                </div>
+                                </NavLink>
                             ))}
                         </div>
                     </div>
