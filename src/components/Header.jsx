@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import ThemeToggle from "./Themetoggle";
 
 export default function Header() {
     return (
@@ -11,6 +12,7 @@ export default function Header() {
                 <NavLink to="/guess">Game</NavLink>
                 <NavLink to="/favorites">My Team</NavLink>
             </nav>
+            <ThemeToggle />
         </header>
     );
 }
