@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link, NavLink } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Axios from "../services/Axios";
 import "../PokemonDetail.css";
 
@@ -8,14 +8,28 @@ export default function PokemonDetail() {
     const navigate = useNavigate();
     const [pokemon, setPokemon] = useState(null);
     const [error, setError] = useState(false);
+    const [spriteIndex, setSpriteIndex] = useState(0);
 
     useEffect(() => {
         setPokemon(null);
         setError(false);
+        setSpriteIndex(0); // Reset sprite view when ID changes
         Axios.get(`/pokemon/${id}`)
             .then(res => res.data ? setPokemon(res.data) : setError(true))
             .catch(() => setError(true));
     }, [id]);
+
+    // Compute available sprites with their metadata
+    const validSprites = useMemo(() => {
+        if (!pokemon?.sprites) return [];
+        const list = [
+            { src: pokemon.sprites.regular, isShiny: false, isGmax: false },
+            { src: pokemon.sprites.shiny, isShiny: true, isGmax: false },
+            { src: pokemon.sprites.gmax?.regular, isShiny: false, isGmax: true },
+            { src: pokemon.sprites.gmax?.shiny, isShiny: true, isGmax: true }
+        ];
+        return list.filter(item => item.src); // Only keep existing images
+    }, [pokemon]);
 
     if (error) return (
         <div className="error-msg">
@@ -25,6 +39,16 @@ export default function PokemonDetail() {
     );
     
     if (!pokemon) return <div className="loader">Loading...</div>;
+
+    const currentSprite = validSprites[spriteIndex] || validSprites[0];
+
+    const handlePrev = () => {
+        setSpriteIndex(prev => (prev === 0 ? validSprites.length - 1 : prev - 1));
+    };
+
+    const handleNext = () => {
+        setSpriteIndex(prev => (prev === validSprites.length - 1 ? 0 : prev + 1));
+    };
 
     const getStatPct = (v) => Math.min((v / 255) * 100, 100);
     
@@ -41,26 +65,29 @@ export default function PokemonDetail() {
     const primaryColor = typeColors[primaryType] || "#3b4cca";
 
     const statLabels = {
-        hp: "HP",
-        atk: "Attack",
-        def: "Defense",
-        spe_atk: "Sp. Atk",
-        spe_def: "Sp. Def",
-        vit: "Speed"
+        hp: "HP", atk: "Attack", def: "Defense",
+        spe_atk: "Sp. Atk", spe_def: "Sp. Def", vit: "Speed"
     };
 
     return (
         <div className="pokemon-detail-page" style={{ '--primary-color': primaryColor }}>
-            <button className="back-button" onClick={() => navigate(-1)}>
-                ← Back
-            </button>
+            <button className="back-button" onClick={() => navigate(-1)}>← Back</button>
 
             <div className="detail-hero">
                 <div className="hero-background"></div>
                 <div className="hero-content">
                     <div className="pokemon-header">
                         <span className="pokemon-number">#{String(pokemon.pokedex_id).padStart(3, '0')}</span>
-                        <h1 className="pokemon-title">{pokemon.name?.fr}</h1>
+                        
+                        {/* Title Container with badges */}
+                        <div className="title-container">
+                            <h1 className="pokemon-title">
+                                {pokemon.name?.fr}
+                                {currentSprite?.isShiny && <span className="shiny-star" title="Shiny">★</span>}
+                            </h1>
+                            {currentSprite?.isGmax && <span className="gmax-badge">G-MAX</span>}
+                        </div>
+
                         <div className="type-badges">
                             {pokemon.types?.map((t, i) => (
                                 <Link to={`/list?type=${t.name}`} key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
@@ -71,13 +98,25 @@ export default function PokemonDetail() {
                         </div>
                     </div>
 
-                    <div className="pokemon-image-container">
-                        <div className="image-glow"></div>
-                        <img 
-                            src={pokemon.sprites?.regular} 
-                            alt={pokemon.name?.fr} 
-                            className="pokemon-image-main"
-                        />
+                    <div className="pokemon-display-container">
+                        {validSprites.length > 1 && (
+                            <button className="nav-arrow left" onClick={handlePrev}>❮</button>
+                        )}
+                        
+                        <div className="pokemon-image-container">
+                            <div className="image-glow"></div>
+                            <img
+                                style={ { maxWidth: '100%', height: 'auto', maxHeight: '300px', minHeight: '200px' } }
+                                src={currentSprite?.src} 
+                                alt={pokemon.name?.fr} 
+                                className="pokemon-image-main"
+                                key={currentSprite?.src} 
+                            />
+                        </div>
+
+                        {validSprites.length > 1 && (
+                            <button className="nav-arrow right" onClick={handleNext}>❯</button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -117,11 +156,7 @@ export default function PokemonDetail() {
                         <h2 className="section-title">Evolution Chain</h2>
                         <div className="evolution-chain">
                             {pokemon.evolution?.pre?.map((e, i) => (
-                                <Link 
-                                    key={i} 
-                                    to={`/pokemon/${e.pokedex_id}`} 
-                                    className="evolution-item previous"
-                                >
+                                <Link key={i} to={`/pokemon/${e.pokedex_id}`} className="evolution-item previous">
                                     <div className="evo-label">Previous</div>
                                     <div className="evo-name">{e.name}</div>
                                     <div className="evo-arrow">→</div>
@@ -134,11 +169,7 @@ export default function PokemonDetail() {
                             </div>
 
                             {pokemon.evolution?.next?.map((e, i) => (
-                                <Link 
-                                    key={i} 
-                                    to={`/pokemon/${e.pokedex_id}`} 
-                                    className="evolution-item next"
-                                >
+                                <Link key={i} to={`/pokemon/${e.pokedex_id}`} className="evolution-item next">
                                     <div className="evo-arrow">→</div>
                                     <div className="evo-label">Next</div>
                                     <div className="evo-name">{e.name}</div>
