@@ -73,12 +73,12 @@ export default function Home() {
           <div className="hero-stats">
             <div className="stat-box">
               <div className="stat-number">{stats.total}</div>
-              <div className="stat-label">Pokémon</div>
+              <div className="stat-label" style={ { color: 'white' } }>Pokémon</div>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-box">
               <div className="stat-number">{stats.types}</div>
-              <div className="stat-label">Types</div>
+              <div className="stat-label" style={ { color: 'white' } }>Types</div>
             </div>
           </div>
 
