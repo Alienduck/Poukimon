@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { NuqsAdapter } from 'nuqs/adapters/react'
 import './Layout.css'
+import Home from './components/Home'
 import Pokelist from './components/Pokelist'
 import RandomPokemon from './components/RandomPokemon'
 import GuessPokemon from './components/GuessPokemon'
@@ -19,7 +20,7 @@ function App() {
             <Header />
             <main className="app-content">
               <Routes>
-                <Route path="/" element={<div style={{textAlign: 'center'}}><h2>Welcome !</h2><p>Select a tab.</p></div>} />
+                <Route path="/" element={<Home />} />
                 <Route path="/pokemon/:id" element={<PokemonDetail />} />
                 <Route path="/list" element={<Pokelist />} />
                 <Route path="/random" element={<RandomPokemon />} />
