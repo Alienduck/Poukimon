@@ -29,7 +29,7 @@ export default function RandomPokemon() {
                 />
             </Link>
             <br />
-            <label htmlFor="poukimon-name">{pokeData ? pokeData.name.fr : "Loading..."}</label>
+            <Link htmlFor="poukimon-name" style={ { color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.2rem' } } to={`/pokemon/${pokemonId}`}>{pokeData ? pokeData.name.fr : "Loading..."}</Link>
             <br />
             <button onClick={handleRefresh}>Change Poukimon</button>
         </div>
