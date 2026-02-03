@@ -63,10 +63,10 @@ export default function PokemonDetail() {
                         <h1 className="pokemon-title">{pokemon.name?.fr}</h1>
                         <div className="type-badges">
                             {pokemon.types?.map((t, i) => (
-                                <NavLink hrefLang={`/list?type=${t.name}`} key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
+                                <Link to={`/list?type=${t.name}`} key={i} className="type-badge" style={{ background: typeColors[t.name] }}>
                                     <img src={t.image} alt={t.name} />
                                     <span>{t.name}</span>
-                                </NavLink>
+                                </Link>
                             ))}
                         </div>
                     </div>
