@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Axios from "../services/Axios";
+import "../GuessPokemon.css";
 
 export default function GuessPokemon() {
     const getRandomId = () => Math.floor(Math.random() * 1025) + 1;
@@ -65,9 +66,15 @@ export default function GuessPokemon() {
                         </div>
                     )}
                     {message && <p className="status-message">{message}</p>}
+                    {isGuessed && (<div className="pokemon-info">
+                        <h3>{pokemonData.name.fr} ({pokemonData.name.en})</h3>
+                    </div>)}
                 </div>
             )}
-            <button className="refresh-btn" onClick={handleRefresh}>Change Poukimon</button>
+            <div className="buttons-container">
+                {!isGuessed && <button onClick={() => setIsGuessed(true)} className="reveal-btn">Reveal Poukimon</button>}
+                <button className="refresh-btn" onClick={handleRefresh}>Change Poukimon</button>
+            </div>
         </div>
     );
 }

@@ -526,10 +526,6 @@ input[type="text"]::placeholder {
   background: rgba(92, 107, 192, 0.2);
 }
 
-.refresh-btn {
-  margin-top: 1rem;
-}
-
 /* ========================================
    UTILITY CLASSES
    ======================================== */
