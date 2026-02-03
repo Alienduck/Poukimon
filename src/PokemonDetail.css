@@ -112,14 +112,87 @@
   margin-bottom: 0.5rem;
 }
 
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
 .pokemon-title {
-  font-size: 3.5rem;
-  font-weight: 900;
-  margin: 0 0 1.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-  line-height: 1.1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Shiny Star Animation */
+.shiny-star {
+  color: #ffd700;
+  font-size: 2.5rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  animation: spinStar 3s linear infinite;
+}
+
+@keyframes spinStar {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* G-MAX Badge Style */
+.gmax-badge {
+  background: #ff3e3e;
+  color: white;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-top: 5px;
+  box-shadow: 0 0 10px #ff3e3e;
+  letter-spacing: 0.1em;
+  border: 2px solid white;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+/* Mobile check for arrows */
+@media (max-width: 640px) {
+  .pokemon-display-container {
+    gap: 10px;
+  }
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
 }
 
 .type-badges {
@@ -157,6 +230,15 @@
 }
 
 /* Pokemon Image */
+
+.pokemon-display-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
 .pokemon-image-container {
   position: relative;
   display: flex;
