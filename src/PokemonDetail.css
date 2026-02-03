@@ -366,7 +366,7 @@
 .evolution-chain {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 2.5rem;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -413,6 +413,8 @@
 
 .evolution-item.previous:hover,
 .evolution-item.next:hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
   transform: translateY(-5px) scale(1.05);
   box-shadow: var(--shadow-lg);
 }
